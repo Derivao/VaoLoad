@@ -1,0 +1,43 @@
+name: Verificar compilacion con Microsoft Defender
+on:
+  push:
+    paths: ['.github/workflows/security.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  scan:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - name: Descargar exactamente la compilacion reportada
+        uses: actions/download-artifact@v4
+        with:
+          name: VaoLoad-App-Windows
+          run-id: 41167857049
+          github-token: ${{ github.token }}
+          path: suspect
+      - name: Registrar hashes y analizar sin ejecutar
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          New-Item -ItemType Directory -Force report | Out-Null
+          Get-ChildItem suspect -Recurse -File | Get-FileHash -Algorithm SHA256 | Export-Csv report/hashes.csv -NoTypeInformation
+          $status = Get-MpComputerStatus
+          $status | Format-List * | Out-File report/defender-status.txt
+          if (-not $status.AntivirusEnabled) { throw 'Defender no esta activo: no se puede certificar un analisis.' }
+          Update-MpSignature
+          $start = Get-Date
+          Start-MpScan -ScanType CustomScan -ScanPath (Resolve-Path suspect).Path
+          $detections = @(Get-MpThreatDetection | Where-Object { $_.InitialDetectionTime -ge $start.AddMinutes(-2) })
+          $detections | ConvertTo-Json -Depth 8 | Out-File report/detections.json
+          Get-MpThreat | Format-List * | Out-File report/threats.txt
+          if ($detections.Count -gt 0) { throw 'Defender detecto amenazas. Ver detections.json.' }
+          'Analisis completado sin detecciones. Esto no garantiza ausencia de malware.' | Out-File report/result.txt
+      - name: Guardar resultados
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: VaoLoad-Defender-report
+          path: report/
