@@ -1,0 +1,51 @@
+VAOLOAD 0.2 - WINDOWS
+
+INSTALAR O ACTUALIZAR
+1. Extrae TODO el ZIP en una carpeta.
+2. Necesitas Python 3.11 o posterior (con Python Launcher y Tcl/Tk):
+   https://www.python.org/downloads/windows/
+   Y Node.js LTS actual: https://nodejs.org
+3. Ejecuta Instalar.bat, tambien si ya usabas la version anterior.
+   Instala la nueva interfaz y actualiza yt-dlp y FFmpeg en .venv.
+4. Abre Iniciar.bat.
+
+USO
+Pega hasta 50 enlaces, UNO POR LINEA. Elige MP4 o MP3, calidad y carpeta.
+Pulsa Descargar. Tres videos se procesan a la vez; el resto espera en cola.
+Los duplicados se omiten. Si falla uno, los demas continuan.
+Cancelar detiene el lote completo. Se conservan archivos parciales para reanudar.
+El boton Detalles muestra los errores. Abrir carpeta muestra los archivos.
+La configuracion de calidad y destino se aplica a todo el lote.
+
+CAMBIOS
+Interfaz reducida con botones redondeados, selector MP4/MP3 y menu de calidad.
+Sin eslogan ni explicaciones largas en la ventana principal.
+Cola de 50 enlaces y progreso por video.
+Tres descargas simultaneas, hasta cuatro fragmentos simultaneos por descarga
+cuando el formato lo permite. No se hacen consultas separadas de miniaturas.
+La velocidad depende de YouTube, de tu conexion y del equipo. No se garantiza
+que la conexion inicial de cada video sea mas rapida. No se midio una mejora
+contra la version anterior con descargas reales.
+
+CALIDAD Y LIMITES
+MP4: de 360p a 2160p como limite maximo, formatos MP4/M4A disponibles.
+MP3: 128, 192 o 320 kbps. Subir bitrate no mejora el original.
+Un porcentaje corresponde a la pista actual: puede reiniciarse entre audio y video.
+La barra general cuenta videos procesados, incluidos errores y cancelaciones.
+Un enlace por video o Short; las listas completas no se descargan.
+Solo contenido propio o autorizado. Sin DRM, privados ni directos activos.
+YouTube puede rechazar descargas o no ofrecer la calidad seleccionada.
+No se sobrescriben archivos existentes.
+
+VALIDACION
+7 pruebas automaticas: lote de 50, limite de 51, duplicados, enlaces invalidos,
+formatos, concurrencia maxima de 3 con errores aislados, cancelacion de pendientes.
+Sintaxis Python y ZIP comprobados. Interfaz y descargas reales aun no probadas
+en Windows en esta sesion. No es un EXE autonomo; requiere los pasos de instalacion.
+
+FUENTES
+https://github.com/yt-dlp/yt-dlp
+https://github.com/yt-dlp/yt-dlp/wiki/EJS
+https://github.com/imageio/imageio-ffmpeg
+https://customtkinter.tomschimansky.com/
+Dependencias descargadas al instalar, con sus respectivas licencias.

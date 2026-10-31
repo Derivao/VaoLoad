@@ -1,0 +1,3 @@
+yt-dlp[default]
+imageio-ffmpeg
+customtkinter>=5.2,<6
