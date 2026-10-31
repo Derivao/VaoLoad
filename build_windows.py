@@ -41,6 +41,7 @@ def build():
     import imageio_ffmpeg
     shutil.copy2(imageio_ffmpeg.get_ffmpeg_exe(),cache/'ffmpeg.exe')
     subprocess.run([sys.executable,'-m','unittest','discover','-p','test_*.py'],check=True)
+    subprocess.run([sys.executable,'-c',"from app import App; a=App(); a.update(); a.change_format('MP3'); a.toggle_motion(); a.toggle_motion(); a.update(); a.destroy()"],check=True)
     print('Compilando VaoLoad...',flush=True)
     subprocess.run([sys.executable,'-m','PyInstaller','--noconfirm','--clean','--onedir','--windowed','--noupx','--name','VaoLoad','--icon',str(ROOT/'vaoload.ico'),'--collect-all','customtkinter','app.py'],check=True)
     target=ROOT/'dist'/'VaoLoad';tools=target/'tools';tools.mkdir(exist_ok=True)

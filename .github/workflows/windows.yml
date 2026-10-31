@@ -21,6 +21,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: VaoLoad-App-Windows
-          path: VaoLoad-App-Windows.zip
+          path: dist/VaoLoad/
           if-no-files-found: error
           retention-days: 14
