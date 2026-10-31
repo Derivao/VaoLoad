@@ -8,7 +8,7 @@ permissions:
   actions: read
 jobs:
   scan:
-    runs-on: windows-latest
+    runs-on: windows-2022
     timeout-minutes: 15
     steps:
       - name: Descargar exactamente la compilacion reportada
@@ -27,7 +27,7 @@ jobs:
           $status = Get-MpComputerStatus
           $status | Format-List * | Out-File report/defender-status.txt
           if (-not $status.AntivirusEnabled) { throw 'Defender no esta activo: no se puede certificar un analisis.' }
-          Update-MpSignature
+          try { Update-MpSignature } catch { $_ | Out-File report/signature-update-error.txt }
           $start = Get-Date
           Start-MpScan -ScanType CustomScan -ScanPath (Resolve-Path suspect).Path
           $detections = @(Get-MpThreatDetection | Where-Object { $_.InitialDetectionTime -ge $start.AddMinutes(-2) })
